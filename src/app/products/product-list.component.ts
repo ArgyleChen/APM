@@ -1,24 +1,61 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
+import { IProduct } from "./product";
 
 @Component({
 selector: 'pm-products',
-templateUrl: './product-list.component.html'
+templateUrl: './product-list.component.html',
+styleUrls: ['./product-list.component.css']
 })
 
-export class ProductListComponent
+export class ProductListComponent implements OnInit
 {
     pageTitle : string = 'Welcome Phil Chen Angular'; 
     pageSubTitle: string = 'Product List by Interpolation';
     imageWidth = 50;
     imageMargin = 3;
     showImage: boolean = false;
-    listFilter: string = 'cart';
+    //listFilter: string = 'cart';
 
-    products: any[] = [
+    private _listFilter = '';
+    filteredProducts: IProduct[] = [];
+    get listFilter () :string
+    {return this._listFilter;}
+        
+    set listFilter (value: string)
     {
-        productID: 123,
+        this._listFilter = value;
+        this.filteredProducts = this.performFilter(value);
+    }    
+
+    products: IProduct[] = [
+        { productId: 123,
+            productName: 'A for Apple',
+            productCode: 'ABC-111',
+            description: 'Desc Apple',
+            releaseDate: '17/04/2023',
+            price: 34.88,
+            starRating: 3.5,
+            imageUrl: 'assets/images/garden_cart.png'
+        },
+        { productId: 456,
+            productName: 'Left Rack',
+            productCode: 'RGP-345',
+            description: 'Desc Rack',
+            releaseDate: '18/04/2023',
+            price: 88.88,
+            starRating: 4.5,
+            imageUrl: 'assets/images/leaf_rake.png'
+        },
+    ]
+
+
+    /*
+ products: any[] = [
+    {
+        
+        productId: 123,
         productName: 'A for Apple',
-        productCode: 'ABC',
+        productCode: 'ABC-111',
         description: 'Desc Apple',
         releaseDate: '17/04/2023',
         price: 34.88,
@@ -27,7 +64,7 @@ export class ProductListComponent
     },
     {productID: 456,
     productName: 'R for Rack',
-    productCode: 'ABC',
+    productCode: 'ABC-456',
     description: 'Rack XXX',
     releaseDate: '17/04/2023',
     price: 34.88,
@@ -35,9 +72,23 @@ export class ProductListComponent
     imageURL: 'assets/images/leaf_rake.png'
     }
     ];
+*/
+
+    //get IProduct to get all of the products everytime. 
+    performFilter(filterBy : string) : IProduct[]
+    {
+        filterBy = filterBy.toLocaleLowerCase();
+        //filter() inside ( ) is a function. 
+        return this.products.filter((product:IProduct) =>
+        product.productName.toLocaleLowerCase().includes(filterBy));
+    }
 
     toggleImage(): void{
         this.showImage = !this.showImage;
     }
     
+    //for onInit event
+    ngOnInit(): void {
+        console.log('Temp for Oninit for now.')
+    }
 }  
