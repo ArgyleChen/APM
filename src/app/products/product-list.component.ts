@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { IProduct } from "./product";
+import { ProductService } from "./product.service";
 
 @Component({
 selector: 'pm-products',
@@ -17,7 +18,7 @@ export class ProductListComponent implements OnInit
     //listFilter: string = 'cart';
 
     private _listFilter = '';
-    filteredProducts: IProduct[] = [];
+
     get listFilter () :string
     {return this._listFilter;}
         
@@ -26,26 +27,26 @@ export class ProductListComponent implements OnInit
         this._listFilter = value;
         this.filteredProducts = this.performFilter(value);
     }    
-
+    filteredProducts: IProduct[] = [];
     products: IProduct[] = [
-        { productId: 123,
-            productName: 'A for Apple',
-            productCode: 'ABC-111',
-            description: 'Desc Apple',
-            releaseDate: '17/04/2023',
-            price: 34.88,
-            starRating: 3.5,
-            imageUrl: 'assets/images/garden_cart.png'
-        },
-        { productId: 456,
-            productName: 'Left Rack',
-            productCode: 'RGP-345',
-            description: 'Desc Rack',
-            releaseDate: '18/04/2023',
-            price: 88.88,
-            starRating: 4.5,
-            imageUrl: 'assets/images/leaf_rake.png'
-        },
+        // { productId: 123,
+        //     productName: 'A for Apple',
+        //     productCode: 'ABC-111',
+        //     description: 'Desc Apple',
+        //     releaseDate: '17/04/2023',
+        //     price: 34.88,
+        //     starRating: 3.5,
+        //     imageUrl: 'assets/images/garden_cart.png'
+        // },
+        // { productId: 456,
+        //     productName: 'Left Rack',
+        //     productCode: 'RGP-345',
+        //     description: 'Desc Rack',
+        //     releaseDate: '18/04/2023',
+        //     price: 88.88,
+        //     starRating: 4.5,
+        //     imageUrl: 'assets/images/leaf_rake.png'
+        // },
     ]
 
 
@@ -73,6 +74,9 @@ export class ProductListComponent implements OnInit
     }
     ];
 */
+    //I am still inside the export class{}
+    constructor(private productservice : ProductService)
+    {}
 
     //get IProduct to get all of the products everytime. 
     performFilter(filterBy : string) : IProduct[]
@@ -87,8 +91,10 @@ export class ProductListComponent implements OnInit
         this.showImage = !this.showImage;
     }
     
-    //for onInit event
+    //for onInit event. 跟PB之Open Event差不多。
     ngOnInit(): void {
+        this.products = this.productservice.getProduct();
+        this.filteredProducts = this.products;
         console.log('Temp for Oninit for now.')
     }
 }  
